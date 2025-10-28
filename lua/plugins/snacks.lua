@@ -2,12 +2,16 @@ return {
   "folke/snacks.nvim",
   priority = 1000,
   lazy = false,
-  ---@type snacks.Config
-  opts = {
-    lazygit = { enabled = true },
-    picker = { enabled = true },
-    terminal = { enabled = true },
-  },
+  opts = function()
+    local dashboard = require("plugins.snacks.dashboard")
+
+    return {
+      dashboard = dashboard.opts,
+      lazygit = { enabled = true },
+      picker = { enabled = true },
+      terminal = { enabled = true },
+    }
+  end,
   keys = {
     --- Git
     { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
@@ -19,6 +23,8 @@ return {
     { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
     --- Lazygit
     { "<leader>lg", function() Snacks.lazygit.open() end, desc = "Open lazygit" },
+    --- Terminal
+    { "<c-/>",      function() Snacks.terminal() end, desc = "Toggle Terminal" },
   },
   init = function ()
     vim.api.nvim_create_autocmd("User", {

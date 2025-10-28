@@ -6,8 +6,8 @@ return {
       options = {
         theme = 'dracula',
         disabled_filetypes = {
-          statusline = { 'neo-tree'  },
-          tabline = { 'neo-tree'  },
+          statusline = { 'neo-tree', 'snacks_dashboard' },
+          tabline = { 'neo-tree', 'snacks_dashboard' },
         },
       },
     })

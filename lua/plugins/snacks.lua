@@ -4,12 +4,13 @@ return {
   lazy = false,
   opts = function()
     local dashboard = require("plugins.snacks.dashboard")
+    local notifier = require("plugins.snacks.notifier")
 
     return {
       dashboard = dashboard.opts,
       lazygit = { enabled = true },
       picker = { enabled = true },
-      notifier = { enabled = true },
+      notifier = notifier.opts,
     }
   end,
   keys = {

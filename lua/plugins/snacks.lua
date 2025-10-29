@@ -5,12 +5,14 @@ return {
   opts = function()
     local dashboard = require("plugins.snacks.dashboard")
     local notifier = require("plugins.snacks.notifier")
+    local words = require("plugins.snacks.words")
 
     return {
       dashboard = dashboard.opts,
       lazygit = { enabled = true },
-      picker = { enabled = true },
       notifier = notifier.opts,
+      picker = { enabled = true },
+      words = words.opts,
     }
   end,
   keys = {
@@ -24,8 +26,14 @@ return {
     { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
     --- Lazygit
     { "<leader>lg", function() Snacks.lazygit.open() end, desc = "Open lazygit" },
+    --- Notifier
+    { "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
+    { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
     --- Terminal
     { "<c-/>",      function() Snacks.terminal() end, desc = "Toggle Terminal" },
+    -- Other
+    { "]]",         function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
+    { "[[",         function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
   },
   init = function ()
     vim.api.nvim_create_autocmd("User", {

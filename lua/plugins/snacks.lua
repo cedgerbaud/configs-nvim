@@ -1,3 +1,35 @@
+local function mergeTables(...)
+    local result = {}  -- Start with an empty table
+    for _, t in ipairs({...}) do  -- Loop over all input tables
+        for key, value in pairs(t) do  -- Copy each key-value pair
+            result[key] = value
+        end
+    end
+    return result
+end
+
+local picker_keys = require("plugins.snacks.picker").keys
+local snack_keys = {
+  --- Git
+  { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
+  { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
+  { "<leader>gL", function() Snacks.picker.git_log_line() end, desc = "Git Log Line" },
+  { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status" },
+  { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
+  { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (Hunks)" },
+  { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
+  --- Lazygit
+  { "<leader>lg", function() Snacks.lazygit.open() end, desc = "Open lazygit" },
+  --- Notifier
+  { "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
+  { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
+  --- Terminal
+  { "<c-/>",      function() Snacks.terminal() end, desc = "Toggle Terminal" },
+  -- Other
+  { "]]",         function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
+  { "[[",         function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
+}
+
 return {
   "folke/snacks.nvim",
   priority = 1000,
@@ -6,35 +38,17 @@ return {
     local dashboard = require("plugins.snacks.dashboard")
     local notifier = require("plugins.snacks.notifier")
     local words = require("plugins.snacks.words")
+    local picker = require("plugins.snacks.picker")
 
     return {
       dashboard = dashboard.opts,
       lazygit = { enabled = true },
       notifier = notifier.opts,
-      picker = { enabled = true },
+      picker = picker.opts,
       words = words.opts,
     }
   end,
-  keys = {
-    --- Git
-    { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
-    { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
-    { "<leader>gL", function() Snacks.picker.git_log_line() end, desc = "Git Log Line" },
-    { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status" },
-    { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
-    { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (Hunks)" },
-    { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
-    --- Lazygit
-    { "<leader>lg", function() Snacks.lazygit.open() end, desc = "Open lazygit" },
-    --- Notifier
-    { "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
-    { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
-    --- Terminal
-    { "<c-/>",      function() Snacks.terminal() end, desc = "Toggle Terminal" },
-    -- Other
-    { "]]",         function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
-    { "[[",         function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
-  },
+  keys = mergeTables(picker_keys, snack_keys),
   init = function ()
     vim.api.nvim_create_autocmd("User", {
       pattern = "VeryLazy",
@@ -53,7 +67,7 @@ return {
             dd(...)
           end
         else
-          vim.print = _G.dd 
+          vim.print = _G.dd
         end
 
         -- Create some toggle mappings

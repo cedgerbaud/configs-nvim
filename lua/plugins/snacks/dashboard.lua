@@ -1,5 +1,10 @@
 local D = {}
 
+local pwd = function()
+  local cwd = vim.fn.getcwd()
+  return "📁 " .. cwd
+end
+
 D.opts = {
   enabled = true,
   width = 60,
@@ -84,7 +89,8 @@ dMP dMP dMMMMMP  VMMMP"    VP"  dMP dMP dMP dMP
       pane = 2,
       section = "terminal",
 --      cmd = "colorscript -e square",
-      cmd = "echo 'Oh my god, I\'m really that guy !",
+      -- cmd = "echo 'Oh my god, I\'m really that guy !",
+      cmd = "echo " .. pwd(),
       height = 5,
       padding = 1,
     },

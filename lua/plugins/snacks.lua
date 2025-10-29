@@ -9,7 +9,7 @@ return {
       dashboard = dashboard.opts,
       lazygit = { enabled = true },
       picker = { enabled = true },
-      terminal = { enabled = true },
+      notifier = { enabled = true },
     }
   end,
   keys = {
